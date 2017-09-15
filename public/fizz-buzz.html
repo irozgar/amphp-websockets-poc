@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FizzBuzz over websockets</title>
+</head>
+<body>
+
+<form id="loginForm">
+
+</form>
+
+<form id="form">
+    <input type="number" autofocus id="input" min="0" value="0">
+    <button type="submit">Send</button>
+</form>
+
+<div id="result"></div>
+
+<script type="text/javascript">
+    (function () {
+        var ws = new WebSocket("ws://localhost/fizz-buzz");
+
+        var $input = document.getElementById("input");
+        var $result = document.getElementById("result");
+
+        document.getElementById("form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            ws.send($input.value);
+        });
+
+        ws.addEventListener("open", logEvent);
+
+        ws.addEventListener("message", function (e) {
+            $result.innerHTML = e.data;
+        });
+
+        ws.addEventListener("close", logEvent);
+        ws.addEventListener("error", logEvent);
+
+        function logEvent(e) {
+            console.log(e);
+        }
+    })();
+</script>
+</body>
+</html>
